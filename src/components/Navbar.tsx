@@ -50,11 +50,23 @@ const Navbar = () => {
 
   const { services, companyLinks, cta } = completeData.navbar;
 
+  // Scroll lock effect
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 20);
-      
+
       // Hide on scroll down, show on scroll up
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setHidden(true);
@@ -75,14 +87,12 @@ const Navbar = () => {
   };
 
   return (
-    <><nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        hidden ? "-translate-y-full" : "translate-y-0"
-      } ${
-        scrolled
-          ? "bg-white/80 backdrop-blur-xl shadow-xl py-1 border-b border-white/20"
-          : "bg-white/80 py-2"
-      }`}
+    <>    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${hidden ? "-translate-y-full" : "translate-y-0"
+        } ${scrolled
+          ? "bg-white/95 backdrop-blur-xl shadow-xl py-1 border-b border-slate-100"
+          : "bg-white/80 py-2 border-b border-white/10"
+        }`}
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Logo Section */}
@@ -100,7 +110,7 @@ const Navbar = () => {
             <button
               onMouseEnter={handleServicesMouseEnter}
               onMouseLeave={handleServicesMouseLeave}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs uppercase tracking-widest transition-all text-black hover:bg-black/5`}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs uppercase font-bold tracking-widest transition-all text-slate-900 hover:bg-slate-100"
             >
               <PaintBucket className="h-4 w-4" />
               Services
@@ -129,7 +139,7 @@ const Navbar = () => {
                       <h3 className="text-2xl font-black uppercase italic tracking-tighter leading-none mb-4">
                         Top Rated <br /> Excellence
                       </h3>
-                      <p className="text-white/70 text-[10px] uppercase font-bold tracking-[0.2em]">
+                      <p className="text-white/70 text-[10px] uppercase font-bold tracking-[0.2em] w-full">
                         Over 200 Five-Star <br /> Google Reviews
                       </p>
                     </div>
@@ -178,7 +188,7 @@ const Navbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs uppercase tracking-widest transition-all text-black hover:bg-black/5`}
+                className="flex items-center gap-2 px-3 py-2 rounded-full text-xs uppercase font-bold tracking-widest transition-all text-slate-900 hover:bg-slate-100"
               >
                 <Icon />
                 {link.label}
@@ -201,62 +211,125 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsMenuOpen(true)}
-            className={`lg:hidden p-2 rounded-full transition-all ${scrolled ? "text-foreground" : "text-white"}`}
+            className="lg:hidden group relative w-11 h-11 flex flex-col items-center justify-center rounded-2xl transition-all duration-500 bg-slate-100 text-slate-900 border border-slate-200 hover:bg-slate-200"
           >
-            <Menu className="h-8 w-8" />
+            <div className="space-y-1.5">
+              <span className="block w-6 h-0.5 bg-current transition-transform duration-300 rounded-full" />
+              <span className="block w-4 h-0.5 bg-current transition-transform duration-300 rounded-full ml-auto" />
+              <span className="block w-6 h-0.5 bg-current transition-transform duration-300 rounded-full" />
+            </div>
           </button>
         </div>
       </div>
     </nav>
 
-      {/* Modern Full-Screen Mobile Menu */}
+      {/* Premium Right-Side Mobile Drawer - COMPACT VERSION */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="fixed inset-0 z-[60] bg-background p-8 flex flex-col justify-between"
-          >
-            <div className="flex justify-between items-center">
-              <img src={logo2nd} alt="Logo" className="h-10 w-auto" />
-              <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-muted rounded-full">
-                <X className="h-8 w-8" />
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {services.map(s => (
-                <a
-                  key={s.title}
-                  href="#services"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block text-4xl font-black uppercase italic tracking-tighter text-foreground hover:text-primary"
-                >
-                  {s.title}
-                </a>
-              ))}
-              <div className="h-px bg-border my-8" />
-              {companyLinks.map(l => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block text-xl font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
-
-            <a
-              href="#contact"
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="w-full bg-primary text-white py-6 rounded-2xl text-center font-black uppercase tracking-widest"
+              className="fixed inset-0 z-[60] bg-slate-950/70 backdrop-blur-md lg:hidden"
+            />
+            
+            {/* Slide-out Menu */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-0 right-0 z-[70] h-full w-[85%] max-w-[400px] bg-white lg:hidden flex flex-col shadow-[-30px_0_60px_rgba(0,0,0,0.3)] overflow-hidden"
             >
-              Book Your Transformation
-            </a>
-          </motion.div>
+              {/* Header */}
+              <div className="p-4 flex justify-between items-center border-b border-slate-100 bg-slate-50/50">
+                <img src={logo2nd} alt="Logo" className="h-8 w-auto" />
+                <button 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className="group p-2 bg-white shadow-sm border border-slate-100 rounded-xl hover:bg-red-50 hover:border-red-100 transition-all active:scale-90"
+                >
+                  <X className="h-5 w-5 text-slate-900 group-hover:text-red-500 transition-colors" />
+                </button>
+              </div>
+
+              {/* Navigation Content - Simplified & Robust */}
+              <div className="flex-1 overflow-y-auto px-6 py-8 scrollbar-hide bg-white">
+                <div className="space-y-10">
+                  {/* Services Section */}
+                  <section>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-px flex-1 bg-slate-100" />
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary whitespace-nowrap">Expert Services</p>
+                      <div className="h-px flex-1 bg-slate-100" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {completeData.services.services.map((s) => (
+                        <a
+                          key={s.title}
+                          href="#services"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 bg-slate-50/50 active:scale-95 transition-all group"
+                        >
+                          <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center text-primary mb-3 shadow-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                             {s.icon === "Home" && <Home className="h-5 w-5" />}
+                             {s.icon === "Building2" && <Building2 className="h-5 w-5" />}
+                             {s.icon === "Wrench" && <Wrench className="h-5 w-5" />}
+                             {s.icon === "Hammer" && <Zap className="h-5 w-5" />}
+                             {s.icon === "Droplets" && <PaintBucket className="h-5 w-5" />}
+                             {s.icon === "Car" && <ShieldCheck className="h-5 w-5" />}
+                             {s.icon === "PaintBucket" && <PaintBucket className="h-5 w-5" />}
+                          </div>
+                          <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 text-center leading-tight">
+                            {s.title}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </section>
+
+                  {/* Navigation Links Section */}
+                  <section>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-px flex-1 bg-slate-100" />
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap">Navigation</p>
+                      <div className="h-px flex-1 bg-slate-100" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {companyLinks.map((l) => (
+                        <a
+                          key={l.label}
+                          href={l.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex items-center justify-between p-4 rounded-xl text-slate-900 hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group"
+                        >
+                          <span className="text-sm font-black uppercase tracking-widest">{l.label}</span>
+                          <ArrowRight className="h-4 w-4 text-primary opacity-0 group-hover:opacity-100 transition-all" />
+                        </a>
+                      ))}
+                    </div>
+                  </section>
+
+                  {/* Action Footer Button */}
+                  <section className="pt-6">
+                    <a
+                      href="#contact"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="w-full bg-primary text-white py-5 rounded-2xl text-center font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-transform"
+                    >
+                      <Calendar className="h-5 w-5" />
+                      Get Free Quote
+                    </a>
+                    <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-[0.3em] mt-6">
+                      Serving Florida Since 2014
+                    </p>
+                  </section>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

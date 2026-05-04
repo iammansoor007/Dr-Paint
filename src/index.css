@@ -86,10 +86,6 @@
     --font-body: 'DM Sans', sans-serif;
   }
 
-  @font-face {
-    font-family: 'Space Grotesk';
-    font-display: optional;
-  }
 }
 
 @layer base {
