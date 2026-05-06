@@ -863,7 +863,7 @@
   "quote": {
     "section": {
       "badge": "GET YOUR FREE QUOTE",
-      "headline": "Request Your <span class=\"font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-primary/80\">Free Estimate</span>",
+      "headline": "Request Your <span class=\"font-bold  text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-primary/80\">Free Estimate</span>",
       "description": "Avoid the costly mistakes of hiring the wrong painter. Get your free estimate today — same-day response from our painting pros."
     },
     "services": [
