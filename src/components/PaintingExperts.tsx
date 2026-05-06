@@ -105,7 +105,7 @@ const StatCard = memo(
         className="relative bg-card p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-border shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 w-full"
       >
         <div className="relative">
-          <span className="text-2xl sm:text-3xl md:text-4xl font-black text-primary">
+          <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">
             <Counter value={value} suffix={suffix} />
           </span>
           <div className="absolute -bottom-1 sm:-bottom-2 left-0 w-8 sm:w-12 h-0.5 bg-primary rounded-full" />
@@ -251,7 +251,7 @@ export default function AboutSection() {
               <motion.h2
                 variants={variants}
                 custom={3}
-                className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight"
+                className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight"
               >
                 <span className="block text-foreground">{headline.prefix}</span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80">

@@ -24,13 +24,13 @@ const PaintGuarantee = () => {
               {/* Label */}
               <div className="flex items-center gap-3 mb-6 sm:mb-8">
                 <div className="w-6 sm:w-8 h-[2px] bg-primary flex-shrink-0" />
-                <span className="text-primary text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] sm:tracking-[0.5em]">
+                <span className="text-primary text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] sm:tracking-[0.5em]">
                   Our Promise
                 </span>
               </div>
 
               {/* Headline — fluid, scales from 300px up */}
-              <h2 className="text-[2.4rem] xs:text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-black text-foreground uppercase tracking-tighter leading-[0.85] italic">
+              <h2 className="text-[2.4rem] xs:text-[2.8rem] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-bold text-foreground uppercase tracking-tighter leading-[0.85] italic">
                 Free<br />
                 <span className="text-primary">Paint</span><br />
                 Guarantee
@@ -54,7 +54,7 @@ const PaintGuarantee = () => {
             <motion.a
               href="#contact"
               whileHover={{ x: 4 }}
-              className="group self-start inline-flex items-center gap-3 sm:gap-5 bg-primary text-white px-6 sm:px-10 py-4 sm:py-5 font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] text-[10px] sm:text-xs hover:bg-foreground transition-colors w-full sm:w-auto justify-center sm:justify-start"
+              className="group self-start inline-flex items-center gap-3 sm:gap-5 bg-primary text-white px-6 sm:px-10 py-4 sm:py-5 font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-[10px] sm:text-xs hover:bg-foreground transition-colors w-full sm:w-auto justify-center sm:justify-start"
             >
               Get Your Free Estimate
               <ArrowRight className="w-4 h-4 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
@@ -78,8 +78,8 @@ const PaintGuarantee = () => {
                 </div>
               </div>
               <div>
-                <p className="text-foreground font-black uppercase tracking-wider text-xs sm:text-sm leading-tight">DR. Paint</p>
-                <p className="text-primary font-black uppercase tracking-wider text-xs sm:text-sm leading-tight">Guarantee</p>
+                <p className="text-foreground font-bold uppercase tracking-wider text-xs sm:text-sm leading-tight">DR. Paint</p>
+                <p className="text-primary font-bold uppercase tracking-wider text-xs sm:text-sm leading-tight">Guarantee</p>
                 <div className="flex gap-0.5 sm:gap-1 mt-1.5 sm:mt-2">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary fill-primary" />
@@ -102,10 +102,10 @@ const PaintGuarantee = () => {
                 transition={{ delay: 0.2 + i * 0.08 }}
                 className="flex items-center justify-between py-5 sm:py-7 border-b border-border last:border-b-0 gap-4"
               >
-                <span className="text-foreground/50 text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] leading-snug flex-1">
+                <span className="text-foreground/50 text-[9px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] leading-snug flex-1">
                   {stat.label}
                 </span>
-                <span className="text-2xl sm:text-3xl font-black text-primary tabular-nums flex-shrink-0">
+                <span className="text-2xl sm:text-3xl font-bold text-primary tabular-nums flex-shrink-0">
                   {stat.value}
                 </span>
               </motion.div>

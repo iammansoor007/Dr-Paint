@@ -280,7 +280,7 @@ const ServiceCard = ({ service, index }: { service: any; index: number }) => {
               whileTap={{ scale: 0.98 }}
               className="group/btn relative w-full flex items-center justify-between gap-3 bg-primary hover:bg-foreground text-white px-5 py-4 transition-all duration-300"
             >
-              <span className="font-black text-xs uppercase tracking-widest">
+              <span className="font-bold text-xs uppercase tracking-widest">
                 Get Free Estimate
               </span>
               <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
@@ -513,7 +513,7 @@ const Services = () => {
 
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
               <div className="text-center lg:text-left max-w-2xl">
-                <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none mb-6">
+                <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-tighter leading-none mb-6">
                   {cta.title}
                 </h3>
                 <p className="text-white/80 text-lg md:text-xl font-medium leading-relaxed">
@@ -526,7 +526,7 @@ const Services = () => {
                   href={cta.buttonLink}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group/cta w-full px-8 py-6 bg-gradient-to-b from-white to-gray-100 text-primary font-black rounded-none uppercase tracking-[0.3em] text-center shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-4"
+                  className="group/cta w-full px-8 py-6 bg-gradient-to-b from-white to-gray-100 text-primary font-bold rounded-none uppercase tracking-[0.3em] text-center shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-4"
                 >
                   <span>{cta.buttonText}</span>
                   <ArrowRight className="w-6 h-6 group-hover/cta:translate-x-2 transition-transform" />
@@ -536,7 +536,7 @@ const Services = () => {
                   href="tel:+1234567890"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full px-8 py-6 text-white font-black border-2 border-white/40 rounded-none hover:bg-white/10 hover:border-white uppercase tracking-[0.3em] text-center transition-all duration-300 flex items-center justify-center gap-4 backdrop-blur-sm"
+                  className="w-full px-8 py-6 text-white font-bold border-2 border-white/40 rounded-none hover:bg-white/10 hover:border-white uppercase tracking-[0.3em] text-center transition-all duration-300 flex items-center justify-center gap-4 backdrop-blur-sm"
                 >
                   <span>Call Now</span>
                 </motion.a>

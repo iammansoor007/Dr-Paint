@@ -90,7 +90,7 @@ const MasonryCard = forwardRef<HTMLDivElement, { project: any; index: number }>(
           {project.year}
         </div>
         
-        <h3 className="text-xl md:text-2xl font-black text-foreground uppercase italic tracking-tighter leading-none mb-3 md:mb-4 group-hover:text-primary transition-colors">
+        <h3 className="text-xl md:text-2xl font-bold text-foreground uppercase italic tracking-tighter leading-none mb-3 md:mb-4 group-hover:text-primary transition-colors">
           {project.title}
         </h3>
         
@@ -145,12 +145,12 @@ const Portfolio = () => {
                 <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/20">
                   <Palette className="w-3 h-3" />
                 </div>
-                <span className="text-primary uppercase tracking-[0.4em] text-[9px] md:text-[10px] font-black">
+                <span className="text-primary uppercase tracking-[0.4em] text-[9px] md:text-[10px] font-bold">
                   {section.badge}
                 </span>
               </motion.div>
               <h2 
-                className="text-4xl sm:text-5xl md:text-7xl font-black text-foreground uppercase tracking-tighter leading-[0.9] md:leading-none"
+                className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tighter leading-[0.9] md:leading-none"
                 dangerouslySetInnerHTML={{ __html: section.headline }}
               />
             </div>
@@ -162,7 +162,7 @@ const Portfolio = () => {
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
-                className={`text-[11px] font-black uppercase tracking-[0.3em] transition-all relative py-2 ${
+                className={`text-[11px] font-bold uppercase tracking-[0.3em] transition-all relative py-2 ${
                   activeTab === cat 
                   ? "text-primary" 
                   : "text-muted-foreground hover:text-foreground"
@@ -196,7 +196,7 @@ const Portfolio = () => {
         {/* View All Action */}
         <div className="mt-16 md:mt-20 pt-16 md:pt-20 border-t border-border flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
-            <h4 className="text-xl md:text-2xl font-black uppercase italic tracking-tight text-foreground">
+            <h4 className="text-xl md:text-2xl font-bold uppercase italic tracking-tight text-foreground">
               Ready to see more?
             </h4>
             <p className="text-muted-foreground text-[10px] md:text-sm uppercase tracking-widest mt-1">
@@ -207,7 +207,7 @@ const Portfolio = () => {
             href="#contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            className="group w-full md:w-auto inline-flex items-center justify-center gap-4 md:gap-6 bg-foreground text-background px-6 md:px-10 py-4 md:py-5 font-black uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-white"
+            className="group w-full md:w-auto inline-flex items-center justify-center gap-4 md:gap-6 bg-foreground text-background px-6 md:px-10 py-4 md:py-5 font-bold uppercase tracking-[0.2em] transition-all hover:bg-primary hover:text-white"
           >
             <span>Load More Projects</span>
             <div className="hidden md:block w-8 h-[2px] bg-current transform group-hover:w-12 transition-all" />

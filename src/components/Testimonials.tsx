@@ -240,7 +240,7 @@ const TestimonialCard = ({
 
         {/* Quote Text */}
         <div className="flex-1 mb-8">
-          <p className="text-foreground/90 text-lg md:text-xl lg:text-2xl leading-relaxed font-black uppercase italic tracking-tighter">
+          <p className="text-foreground/90 text-lg md:text-xl lg:text-2xl leading-relaxed font-bold uppercase italic tracking-tighter">
             "{testimonial.text}"
           </p>
         </div>
@@ -248,12 +248,12 @@ const TestimonialCard = ({
         {/* Footer */}
         <div className="flex items-center justify-between gap-6 pt-8 border-t border-border mt-auto">
           <div className="flex items-center gap-4 min-w-0">
-            <div className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-primary flex items-center justify-center text-white font-black text-lg md:text-xl shadow-lg flex-shrink-0">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-primary flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-lg flex-shrink-0">
               {testimonial.avatar}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h4 className="font-black text-foreground text-sm md:text-lg uppercase tracking-widest truncate">
+                <h4 className="font-bold text-foreground text-sm md:text-lg uppercase tracking-widest truncate">
                   {testimonial.name}
                 </h4>
                 <Icons.Verified />

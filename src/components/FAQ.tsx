@@ -1,4 +1,6 @@
-import { useRef, useEffect, useState } from "react";
+"use client";
+
+import { useRef, useEffect, useState, memo } from "react";
 import {
   motion,
   useScroll,
@@ -6,11 +8,15 @@ import {
   useSpring,
   useInView,
   useMotionValue,
+  useReducedMotion,
   AnimatePresence
 } from "framer-motion";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import completeData from "../src/data/completeData.json";
+import SectionHeader from "@/components/SectionHeader";
+import faqvector from "../assets/faqvector.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,6 +46,11 @@ const Icons = {
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" strokeWidth="1.5" />
       <path d="M14 2v6h6" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  ),
+  ArrowRight: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
   ),
   Chat: () => (
@@ -91,26 +102,19 @@ const Icons = {
       <rect x="8" y="13" width="8" height="8" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   ),
-  Layout: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M9 3v18" stroke="currentColor" strokeWidth="1.5" />
+  HelpCircle: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M12 16v.01M12 13a3 3 0 10-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
-  TreePine: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M12 2L4 10h3l-4 6h5l-3 6h14l-3-6h5l-4-6h3l-8-8z" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  )
 };
 
 const iconMap = {
   Home: Icons.Home,
   Tools: Icons.Tools,
   Shield: Icons.Shield,
-  Storm: Icons.Storm,
-  Layout: Icons.Layout,
-  TreePine: Icons.TreePine
+  Storm: Icons.Storm
 };
 
 const SubtleBackground = () => (
@@ -127,36 +131,50 @@ const SubtleBackground = () => (
     />
     <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary/5 to-transparent" />
     <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-primary/5 to-transparent" />
-    <div className="absolute top-40 -right-20 w-[500px] h-[500px] bg-primary/[0.03] rounded-full" />
+    <motion.div
+      animate={{
+        x: [0, 20, 0, -20, 0],
+        y: [0, -15, 25, 15, 0],
+      }}
+      transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+      className="absolute top-40 -right-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl"
+    />
   </div>
 );
 
-const FloatingParticles = () => (
-  <div className="absolute inset-0 pointer-events-none overflow-hidden">
-    {[...Array(8)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-0.5 h-0.5 bg-primary/20 rounded-full"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-        animate={{
-          y: [0, -30, 0],
-          opacity: [0, 0.2, 0],
-        }}
-        transition={{
-          duration: 6 + Math.random() * 4,
-          repeat: Infinity,
-          delay: Math.random() * 3,
-          ease: "easeInOut"
-        }}
-      />
-    ))}
-  </div>
-);
+const FloatingParticles = () => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
 
-const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: number; isOpen: boolean; onToggle: (index: number) => void }) => {
+  if (!isClient) return null;
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-0.5 h-0.5 bg-primary/20 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            opacity: [0, 0.2, 0],
+          }}
+          transition={{
+            duration: 6 + Math.random() * 4,
+            repeat: Infinity,
+            delay: Math.random() * 3,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const AccordionItem = ({ item, index, isOpen, onToggle }) => {
   const [isHovered, setIsHovered] = useState(false);
   const buttonRef = useRef(null);
 
@@ -166,9 +184,9 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
   const springX = useSpring(mouseX, { stiffness: 30, damping: 10 });
   const springY = useSpring(mouseY, { stiffness: 30, damping: 10 });
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (e) => {
     if (!buttonRef.current) return;
-    const rect = (buttonRef.current as HTMLElement).getBoundingClientRect();
+    const rect = buttonRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     mouseX.set(x);
@@ -229,8 +247,8 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
         transition={{ duration: 0.3 }}
       >
         <span className={`
-          text-[90px] font-black leading-none tracking-tighter
-          ${isOpen ? 'text-primary/15' : 'text-muted-foreground/20'}
+          text-[90px] font-bold leading-none tracking-tighter
+          ${isOpen ? 'text-primary/15' : 'text-gray-200/80'}
           transition-colors duration-500
         `}>
           {String(index + 1).padStart(2, '0')}
@@ -243,7 +261,7 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}
         className={`
-          relative bg-card/90 backdrop-blur-sm rounded-2xl
+          relative bg-background/90 backdrop-blur-sm rounded-2xl
           border transition-all duration-500
           ${isOpen
             ? 'border-primary/30 shadow-2xl shadow-primary/15'
@@ -322,7 +340,7 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
               text-base md:text-lg lg:text-xl font-light transition-all duration-500
               ${isOpen
                 ? 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/80 font-medium'
-                : 'text-card-foreground group-hover:text-card-foreground/90'
+                : 'text-foreground/90 group-hover:text-foreground'
               }
             `}>
               {item.question}
@@ -409,7 +427,7 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
 
                   {item.metadata && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
-                      {item.metadata.map((meta: any, i: number) => (
+                      {item.metadata.map((meta, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, x: -10 }}
@@ -418,8 +436,8 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
                           className="flex items-center gap-2 text-xs"
                         >
                           <span className="w-1 h-1 bg-primary rounded-full" />
-                          <span className="text-muted-foreground">{meta.label}:</span>
-                          <span className="font-medium text-card-foreground">{meta.value}</span>
+                          <span className="text-gray-500">{meta.label}:</span>
+                          <span className="font-medium text-gray-700">{meta.value}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -432,7 +450,7 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
                       transition={{ delay: 0.3 }}
                       className="flex flex-wrap items-center gap-4 pt-4 border-t border-primary/10"
                     >
-                      {item.links.map((link: any, i: number) => (
+                      {item.links.map((link, i) => (
                         <motion.a
                           key={i}
                           href={link.url}
@@ -492,7 +510,7 @@ const AccordionItem = ({ item, index, isOpen, onToggle }: { item: any; index: nu
   );
 };
 
-const CategoryFilter = ({ categories, activeCategory, onCategoryChange }: { categories: any[]; activeCategory: string; onCategoryChange: (id: string) => void }) => {
+const CategoryFilter = ({ categories, activeCategory, onCategoryChange }) => {
   return (
     <div className="flex flex-wrap items-center gap-2 md:gap-3">
       {categories.map((category, index) => {
@@ -509,7 +527,7 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }: { cate
               relative px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-medium transition-all duration-300
               ${activeCategory === category.id
                 ? 'text-white'
-                : 'text-muted-foreground hover:text-card-foreground bg-card/50 hover:bg-primary/5'
+                : 'text-muted-foreground hover:text-foreground bg-background/50 hover:bg-primary/5'
               }
             `}
           >
@@ -532,7 +550,7 @@ const CategoryFilter = ({ categories, activeCategory, onCategoryChange }: { cate
   );
 };
 
-const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
+const SearchBar = ({ onSearch }) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
@@ -547,13 +565,13 @@ const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
       `}
     >
       <div className={`
-        relative flex items-center bg-card rounded-full border transition-all duration-300
+        relative flex items-center bg-background rounded-full border transition-all duration-300
         ${isFocused
           ? 'border-primary shadow-lg shadow-primary/10'
-          : 'border-border hover:border-border/80 shadow-md'
+          : 'border-gray-200 hover:border-gray-300 shadow-md'
         }
       `}>
-        <div className="absolute left-4 text-muted-foreground">
+        <div className="absolute left-4 text-gray-400">
           <Icons.Search />
         </div>
 
@@ -564,7 +582,7 @@ const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
           onChange={(e) => onSearch(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-transparent rounded-full text-sm md:text-base text-card-foreground placeholder:text-muted-foreground focus:outline-none"
+          className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-transparent rounded-full text-sm md:text-base text-foreground placeholder:text-gray-400 focus:outline-none"
         />
 
         {isFocused && (
@@ -572,7 +590,7 @@ const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="absolute right-3 text-xs text-muted-foreground"
+            className="absolute right-3 text-xs text-gray-400"
           >
             ⏎
           </motion.div>
@@ -585,134 +603,243 @@ const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
 const KnowledgeCard = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { knowledgeCard } = completeData.faq;
+  const prefersReducedMotion = useReducedMotion();
+
+  const floatAnimation = prefersReducedMotion
+    ? {}
+    : {
+      initial: { y: 0, opacity: 1 },
+      animate: {
+        y: [0, -12, 0],
+        transition: {
+          y: {
+            repeat: Infinity,
+            duration: 4,
+            ease: "easeInOut",
+          },
+        },
+      },
+    };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, delay: 0.4 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="relative group"
-    >
-      <motion.div
-        animate={isHovered ? {
-          rotateX: 2,
-          rotateY: 2,
-          scale: 1.02,
-          boxShadow: "0 30px 60px -15px hsl(var(--primary)/0.3)"
-        } : {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          boxShadow: "0 20px 40px -15px hsl(var(--primary)/0.15)"
-        }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative bg-gradient-to-br from-primary to-primary/80 rounded-3xl p-8 md:p-10 overflow-hidden"
-        style={{ transformPerspective: 1000 }}
-      >
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:24px_24px]" />
-        </div>
+    <div className="relative mt-16 md:mt-24 lg:mt-32">
+      {/* CTA Container */}
+      <div className="relative rounded-3xl overflow-hidden">
+        {/* Cinematic Gradient Background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/90) 50%, hsl(var(--primary)/80) 100%)"
+          }}
+        />
 
-        {isHovered && (
-          <>
-            {[...Array(6)].map((_, i) => (
+        {/* Ambient Glow Effects */}
+        <div className="hidden md:block absolute right-[10%] top-[10%] w-[400px] h-[400px] bg-background/10 blur-[140px] rounded-full pointer-events-none" />
+        <div className="hidden md:block absolute left-[5%] bottom-[20%] w-[250px] h-[250px] bg-black/10 blur-[100px] rounded-full pointer-events-none" />
+
+        {/* Vignette Overlay */}
+        <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle,transparent_60%,rgba(0,0,0,0.3))]" />
+
+        {/* Main Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
+
+          {/* Desktop Layout - Two columns with floating image */}
+          <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
+            {/* Left Column - Text Content */}
+            <div className="max-w-xl">
               <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white/30 rounded-full"
-                initial={{ x: '50%', y: '50%', scale: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="inline-block mb-6"
+              >
+                <span className="px-4 py-2 text-sm font-bold bg-background/10 border border-white/20 rounded-lg text-white backdrop-blur-sm">
+                  STILL HAVE QUESTIONS?
+                </span>
+              </motion.div>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.2] tracking-tight text-white"
+                dangerouslySetInnerHTML={{ __html: knowledgeCard.title }}
+              />
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mt-4 text-white/80 text-lg max-w-lg"
+              >
+                {knowledgeCard.description}
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-8"
+              >
+                <motion.a
+                  href={knowledgeCard.buttonLink}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="relative inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-background text-primary font-bold transition-all duration-300 shadow-lg shadow-[0_10px_40px_rgba(0,0,0,0.3)] hover:bg-muted"
+                >
+                  {knowledgeCard.buttonText}
+                  <Icons.ArrowRight />
+                </motion.a>
+              </motion.div>
+
+              {/* Trust Indicators */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="mt-8 flex gap-4"
+              >
+                <TrustBadge label="Quick Response" color="green" />
+                <TrustBadge label="Expert Support" color="blue" />
+                <TrustBadge label="24/7 Available" color="yellow" />
+              </motion.div>
+            </div>
+
+            {/* Right Column - Floating FAQ Vector */}
+            <div className="relative">
+              <motion.div
                 animate={{
-                  x: [`50%`, `${20 + i * 12}%`],
-                  y: [`50%`, `${15 + i * 10}%`],
-                  scale: [0, 2.5, 0],
-                  opacity: [0, 0.5, 0]
+                  y: [0, -8, 0],
                 }}
                 transition={{
-                  duration: 2.2,
-                  delay: i * 0.12,
+                  duration: 4,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
-              />
-            ))}
-          </>
-        )}
-
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-5">
-            <motion.div
-              animate={isHovered ? {
-                rotate: 360,
-                scale: 1.2,
-                backgroundColor: 'rgba(255,255,255,0.15)'
-              } : {
-                rotate: 0,
-                scale: 1,
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              }}
-              transition={{ duration: 0.8 }}
-              className="w-16 h-16 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20"
-            >
-              <Icons.Chat />
-            </motion.div>
-
-            <div>
-              <h4 className="text-xl md:text-2xl font-semibold text-white mb-2">
-                {knowledgeCard.title}
-              </h4>
-              <p className="text-white/80 text-base md:text-lg">
-                {knowledgeCard.description}
-              </p>
+                className="absolute  bottom-[-47rem] w-[115%] lg:w-[125%]"
+                style={{ right: '1%' }}
+              >
+                <img
+                  src={faqvector}
+                  alt="FAQ Support"
+                  className="w-full h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.4)]"
+                />
+              </motion.div>
             </div>
           </div>
 
-          <motion.a
-            href={knowledgeCard.buttonLink}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative px-7 py-3.5 md:px-8 md:py-4 bg-white text-primary text-xs md:text-sm font-medium rounded-full shadow-2xl overflow-hidden group/btn whitespace-nowrap"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              {knowledgeCard.buttonText}
-              <motion.svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                animate={isHovered ? { x: 5 } : { x: 0 }}
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" />
-              </motion.svg>
-            </span>
+          {/* Mobile Layout - Centered text with vector above */}
+          <div className="md:hidden">
+            {/* Mobile Vector Image - Top */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-accent/10 to-white"
-              initial={{ x: '-100%' }}
-              whileHover={{ x: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            />
-          </motion.a>
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative mb-8"
+            >
+              <motion.div
+                animate={{
+                  y: [0, -8, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="w-full max-w-[280px] sm:max-w-[350px] mx-auto"
+              >
+                <img
+                  src={faqvector}
+                  alt="FAQ Support"
+                  className="w-full h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* Mobile Text Content */}
+            <div className="text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="inline-block mb-4"
+              >
+                <span className="px-3 py-1.5 text-xs font-semibold bg-background/20 border border-white/30 rounded-full text-white/90 backdrop-blur-sm">
+                  STILL HAVE QUESTIONS?
+                </span>
+              </motion.div>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="text-3xl sm:text-4xl font-bold leading-[1.2] text-white"
+                dangerouslySetInnerHTML={{ __html: knowledgeCard.title }}
+              />
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mt-3 text-white/80 text-base max-w-md mx-auto"
+              >
+                {knowledgeCard.description}
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="mt-6 flex flex-col sm:flex-row gap-3 justify-center"
+              >
+                <motion.a
+                  href={knowledgeCard.buttonLink}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-background text-primary font-bold shadow-lg"
+                >
+                  {knowledgeCard.buttonText}
+                  <Icons.ArrowRight />
+                </motion.a>
+              </motion.div>
+
+              {/* Trust Badges - Mobile */}
+              <div className="mt-6 flex flex-wrap justify-center gap-2">
+                <TrustBadge label="Quick Response" color="green" />
+                <TrustBadge label="Expert Support" color="blue" />
+                <TrustBadge label="24/7 Available" color="yellow" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="absolute top-6 left-6 w-12 h-12 border-t-2 border-l-2 border-white/20" />
-        <div className="absolute bottom-6 right-6 w-12 h-12 border-b-2 border-r-2 border-white/20" />
-      </motion.div>
-    </motion.div>
+        {/* Bottom Fade */}
+        <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-b-3xl" />
+      </div>
+    </div>
   );
 };
 
 const FAQ = () => {
   const sectionRef = useRef(null);
   const [isClient, setIsClient] = useState(false);
-  const [openItems, setOpenItems] = useState<number[]>([0]);
+  const [openItems, setOpenItems] = useState([0]);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { section, categories, items, knowledgeCard } = completeData.faq;
+  const { section, categories, items } = completeData.faq;
 
-  const filteredItems = items.filter((item: any) => {
+  const filteredItems = items.filter(item => {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
     const matchesSearch = searchQuery === '' ||
       item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -720,7 +847,7 @@ const FAQ = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleToggle = (index: number) => {
+  const handleToggle = (index) => {
     setOpenItems(prev =>
       prev.includes(index)
         ? prev.filter(i => i !== index)
@@ -728,7 +855,7 @@ const FAQ = () => {
     );
   };
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = (categoryId) => {
     setActiveCategory(categoryId);
     setOpenItems([]);
   };
@@ -761,7 +888,7 @@ const FAQ = () => {
     return () => ctx.revert();
   }, [isClient]);
 
-  if (!isClient) return null;
+
 
   return (
     <section
@@ -772,18 +899,11 @@ const FAQ = () => {
       <FloatingParticles />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16 faq-reveal">
-          <span className="text-xs font-medium tracking-[0.2em] uppercase text-primary mb-3 block">
-            {section.badge}
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-foreground mb-4">
-            {section.headline}
-          </h2>
-          <p className="text-muted-foreground text-base md:text-lg">
-            {section.description}
-          </p>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-primary to-primary/60 mx-auto mt-6 rounded-full" />
-        </div>
+        <SectionHeader
+          badge={section.badge}
+          headline={section.headline}
+          description={section.description}
+        />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-10 md:mb-12 faq-reveal">
           <CategoryFilter
@@ -796,7 +916,7 @@ const FAQ = () => {
 
         <div className="space-y-3 md:space-y-4 mb-12 md:mb-16">
           {filteredItems.length > 0 ? (
-            filteredItems.map((item: any, index: number) => (
+            filteredItems.map((item, index) => (
               <AccordionItem
                 key={item.id}
                 item={item}
@@ -811,10 +931,10 @@ const FAQ = () => {
               animate={{ opacity: 1 }}
               className="text-center py-16"
             >
-              <div className="text-muted-foreground mb-3">
+              <div className="text-gray-400 mb-3">
                 <Icons.Document />
               </div>
-              <p className="text-muted-foreground text-base">
+              <p className="text-gray-500 text-base">
                 No questions found matching your criteria.
               </p>
               <button
@@ -830,10 +950,29 @@ const FAQ = () => {
           )}
         </div>
 
-    
+        <KnowledgeCard />
       </div>
     </section>
   );
 };
 
 export default FAQ;
+
+const TrustBadge = memo(({ label, color }: { label: string; color: 'green' | 'blue' | 'red' | 'yellow' }) => {
+  const colorClasses = {
+    green: 'bg-green-500',
+    blue: 'bg-blue-500',
+    red: 'bg-primary',
+    yellow: 'bg-yellow-400',
+  };
+
+  return (
+    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/5 backdrop-blur-sm border border-white/10">
+      <div className={`w-1.5 h-1.5 ${colorClasses[color]} rounded-full animate-pulse`} />
+      <span className="text-xs text-white/70 whitespace-nowrap">{label}</span>
+    </div>
+  );
+});
+
+TrustBadge.displayName = "TrustBadge";
+

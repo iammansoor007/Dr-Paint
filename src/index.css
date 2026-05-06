@@ -81,9 +81,9 @@
 
     --sidebar-ring: 212 54% 37%;
 
-    /* TYPOGRAPHY */
-    --font-heading: 'Space Grotesk', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
+    /* TYPOGRAPHY - SYSTEM STACKS */
+    --font-heading: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
 
 }
@@ -97,17 +97,18 @@
     scroll-behavior: smooth;
   }
 
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
   #root {
     position: relative;
     width: 100%;
     min-height: 100vh;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -116,22 +117,13 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), system-ui, sans-serif;
     letter-spacing: -0.03em;
     line-height: 1.05;
   }
 
   section {
     position: relative;
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 1000px;
-  }
-
-  /* Exempt hero and navbar from content-visibility auto to ensure they are always ready */
-  #hero, 
-  .navbar,
-  header {
-    content-visibility: visible !important;
   }
 }
 

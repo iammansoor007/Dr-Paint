@@ -579,7 +579,7 @@ const Hero = () => {
               </motion.div>
 
               <motion.h1
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white lg:leading-[1.1] tracking-tight uppercase"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white lg:leading-[1.1] tracking-tight uppercase"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -655,7 +655,7 @@ const Hero = () => {
                         )}
                       </div>
                       <div>
-                        <div className="text-3xl font-black text-white leading-none mb-1">
+                        <div className="text-3xl font-bold text-white leading-none mb-1">
                           {stat.value}
                         </div>
                         <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">
