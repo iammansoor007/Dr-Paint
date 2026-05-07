@@ -567,7 +567,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
             <div className="lg:col-span-7 flex flex-col items-center lg:items-start gap-6 text-center lg:text-left">
               <motion.div
-                className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 mx-auto lg:mx-0 border border-white/10"
+                className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-2 mx-auto lg:mx-0 border border-white/10 mt-4 md:mt-12"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
